@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<memory>
 #include<limits>
+#include<stack>
 
 using namespace std;
 
@@ -47,6 +48,44 @@ namespace Util{
 
 
 int main( int argc, char** argv ){
-    
+    std::string all_string;
+    std::getline( cin, all_string );
+
+    Util::StrVec reverse_polish = Util::split( all_string );
+
+    std::stack<int> numStack;
+    for( int i = 0; i < static_cast<int>(reverse_polish.size()); i++ ){
+        if( reverse_polish[i].compare( "+" ) == 0 ){
+            int n = numStack.top();
+            numStack.pop();
+            int m = numStack.top();
+            numStack.pop();
+            numStack.push( m + n );
+        }else if( reverse_polish[i].compare( "-" ) == 0 ){
+            int n = numStack.top();
+            numStack.pop();
+            int m = numStack.top();
+            numStack.pop();
+            numStack.push( m - n );
+        }else if( reverse_polish[i].compare( "*" ) == 0 ){
+            int n = numStack.top();
+            numStack.pop();
+            int m = numStack.top();
+            numStack.pop();
+            numStack.push( m * n );
+        }else if( reverse_polish[i].compare( "/" ) == 0 ){
+            int n = numStack.top();
+            numStack.pop();
+            int m = numStack.top();
+            numStack.pop();
+            numStack.push( m / n );
+        }else{
+            numStack.push( std::atoi( reverse_polish[i].c_str() ) );
+        }
+    }
+
+    int res = numStack.top();
+    cout << res << endl;
+
 return 0;
 }
